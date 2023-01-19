@@ -1,4 +1,5 @@
 import express from "express";
+import q2m from "query-to-mongo";
 
 import { checkBlogSchema, getbadRequest } from "./validator.js";
 import blogModel from "./model.js";
@@ -19,7 +20,9 @@ blogRouter.post("/", checkBlogSchema, getbadRequest, async (request, response, n
 
 blogRouter.get("/", async (request, response, next) => {
   try {
-    const blogs = await blogModel.find();
+    const mongoQuerry = q2m(request.query);
+    console.log("QUERY:", mongoQuerry);
+    const blogs = await blogModel.find(mongoQuerry.criteria, mongoQuerry.options.fields).limit(mongoQuerry.options.limit).skip(mongoQuerry.options.skip).sort(mongoQuerry.options.sort);
     response.status(200).send(blogs);
   } catch (error) {
     next(error);

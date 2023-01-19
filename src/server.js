@@ -2,7 +2,8 @@ import express from "express";
 import authorsRouter from "./api/users/index.js";
 import blogRouter from "./api/blogs/index.js";
 import filesRouter from "./api/files/index.js";
-import listEndpoints from "list-endpoints-express";
+import listEndpoint from "list-endpoints-express";
+import listEndpoints from "express-list-endpoints";
 import cors from "cors";
 import { join } from "path";
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericHandler } from "./errorHandler.js";
@@ -36,5 +37,6 @@ mongoose.connection.on("connected", () => {
   server.listen(port, () => {
     console.log(`listening on port ${port}`);
     console.table(listEndpoints(server));
+    console.table(listEndpoint(server));
   });
 });
